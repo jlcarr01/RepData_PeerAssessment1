@@ -48,6 +48,7 @@ summary(rawActivity)
 
 ## What is mean total number of steps taken per day?
 Use ggplot to create histogram of total number of steps taken per day.  
+(Note: filename for plot is *1-hist1* ) 
 
 
 
@@ -57,7 +58,7 @@ g <- ggplot(rawActivity, aes(x=date, weight = steps))
 g + geom_histogram(bins = 61) + labs(y = "Total Steps per Day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![](PA1_template_files/figure-html/1-hist1-1.png)<!-- -->
 
 ```r
 library(dplyr)
@@ -92,7 +93,8 @@ Mean steps per day is **37.3825996** and median steps per day is **0**.
 
 ## What is the average daily activity pattern?
 
-Time series plot of the average number of steps taken. Create a new dataframe with mean, then plot line graph:
+Time series plot of the average number of steps taken. Create a new dataframe with mean, then plot line graph.   
+(Note: filename for plot is *2-Steps_per_interval* ) 
 
 
 ```r
@@ -103,7 +105,7 @@ Time series plot of the average number of steps taken. Create a new dataframe wi
        labs(y = "Average # of Steps per Interval" )
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![](PA1_template_files/figure-html/2-Steps_per_interval-1.png)<!-- -->
 
 ```r
   maxMean <- byInterval %>% filter(mean == max(mean))
@@ -134,7 +136,8 @@ summary(rawActivity)
 ```
 It is notable that there are 8 days for which all data are NA (indicated by NaN for the mean daily number of steps above).  
 To review if there are any additional NA values, All NA data were plotted and the y-axis limits adjusted to see small numbers. In the plots below, one can see that there are exactly 8 days with NA values, so there are no dates where there is a mixture of NA and present data.
-Because of this, one can just set the number of steps to **0** where values are NA. (Or even just remove those rows completely, but that's not what the instructions request.)
+Because of this, one can just set the number of steps to **0** where values are NA. (Or even just remove those rows completely, but that's not what the instructions request.)  
+(Note: filename for plot is *3-NA_Review* )
 
 
 ```r
@@ -149,9 +152,10 @@ with(subset(rawActivity, is.na(steps)),
      points( date, interval, type = "h",  col = "blue") )
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![](PA1_template_files/figure-html/3-NA_Review-1.png)<!-- -->
 
-Impute the NA values to zero, creating a new dataframe named **activity**, then re-plot the total number of steps per day to compare to the first plot. This does not affect the overall histogram, but will affect any average over all the days, reducing all values proportionally.
+Impute the NA values to zero, creating a new dataframe named **activity**, then re-plot the total number of steps per day to compare to the first plot. This does not affect the overall histogram, but will affect any average over all the days, reducing all values proportionally.  
+(Note: filename for plot is *4-hist_after_impute* )
 
 
 ```r
@@ -162,7 +166,7 @@ g <- ggplot(activity, aes(x=date, weight = steps))
 g + geom_histogram(bins = 61) + labs(y = "Total Steps per Day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](PA1_template_files/figure-html/4-hist_after_impute-1.png)<!-- -->
 
 ```r
 summary2 <- activity  %>% 
@@ -196,7 +200,8 @@ summary(activity)
  Max.   :806.00   Max.   :2012-11-30   Max.   :2355.0                  
 ```
 
-Create a plot of average number of steps per 5-minute interval, separated by weekday versus weekend
+Create a plot of average number of steps per 5-minute interval, separated by weekday versus weekend.  
+(Note: filename for plot is *5-weekday_vs_end* )
 
 
 ```r
@@ -216,7 +221,7 @@ Create a plot of average number of steps per 5-minute interval, separated by wee
        facet_wrap(. ~ weekend, nrow = 2, ncol = 1)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](PA1_template_files/figure-html/5-weekday_vs_end-1.png)<!-- -->
 
 
 

@@ -380,7 +380,8 @@ dim(rawActivity)</code></pre>
 <div id="what-is-mean-total-number-of-steps-taken-per-day" class="section level2">
 <h2>What is mean total number of steps taken per day?</h2>
 <p>Use ggplot to create histogram of total number of steps taken per
-day.</p>
+day.<br />
+(Note: filename for plot is <em>1-hist1</em> )</p>
 <pre class="r"><code>library(ggplot2)
 g &lt;- ggplot(rawActivity, aes(x=date, weight = steps))
 g + geom_histogram(bins = 61) + labs(y = &quot;Total Steps per Day&quot;)</code></pre>
@@ -402,7 +403,8 @@ per day is <strong>0</strong>.</p>
 <div id="what-is-the-average-daily-activity-pattern" class="section level2">
 <h2>What is the average daily activity pattern?</h2>
 <p>Time series plot of the average number of steps taken. Create a new
-dataframe with mean, then plot line graph:</p>
+dataframe with mean, then plot line graph.<br />
+(Note: filename for plot is <em>2-Steps_per_interval</em> )</p>
 <pre class="r"><code> byInterval &lt;- rawActivity %&gt;% group_by(interval) %&gt;%
      summarize(mean = mean(steps, na.rm = TRUE), median = median(steps,na.rm=TRUE) )
   g &lt;- ggplot(byInterval,  aes(interval,  mean) )
@@ -435,7 +437,8 @@ plots below, one can see that there are exactly 8 days with NA values,
 so there are no dates where there is a mixture of NA and present data.
 Because of this, one can just set the number of steps to
 <strong>0</strong> where values are NA. (Or even just remove those rows
-completely, but that’s not what the instructions request.)</p>
+completely, but that’s not what the instructions request.)<br />
+(Note: filename for plot is <em>3-NA_Review</em> )</p>
 <pre class="r"><code>par(mfrow=c(2,1))
 plot(rawActivity$date, rawActivity$interval, type = &quot;n&quot;, ylab = &quot;Full Range&quot;)  
 with(subset(rawActivity, is.na(steps)), 
@@ -450,7 +453,8 @@ with(subset(rawActivity, is.na(steps)),
 <strong>activity</strong>, then re-plot the total number of steps per
 day to compare to the first plot. This does not affect the overall
 histogram, but will affect any average over all the days, reducing all
-values proportionally.</p>
+values proportionally.<br />
+(Note: filename for plot is <em>4-hist_after_impute</em> )</p>
 <pre class="r"><code>activity &lt;- rawActivity
 activity$steps[is.na(activity$steps)] &lt;- 0
 par(  mfrow=c(1,1))
@@ -482,7 +486,8 @@ summary(activity)</code></pre>
  3rd Qu.:  0.00   3rd Qu.:2012-11-15   3rd Qu.:1766.2                  
  Max.   :806.00   Max.   :2012-11-30   Max.   :2355.0                  </code></pre>
 <p>Create a plot of average number of steps per 5-minute interval,
-separated by weekday versus weekend</p>
+separated by weekday versus weekend.<br />
+(Note: filename for plot is <em>5-weekday_vs_end</em> )</p>
 <pre class="r"><code> byInterval &lt;- activity %&gt;% group_by(weekend, interval) %&gt;%
      summarize(mean = mean(steps, na.rm = TRUE), median = median(steps,na.rm=TRUE) )</code></pre>
 <pre><code>`summarise()` has grouped output by &#39;weekend&#39;. You can override using the
