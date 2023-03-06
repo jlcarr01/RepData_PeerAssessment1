@@ -14,6 +14,7 @@ Raw data can be found at  https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2
 Note that defaults of read.csv could be used because NA defines missing values and dates are in format "YYYY-MM-DD".  
 
 **rawActivity** is the name of the raw data frame. 
+**byDay** is the dataframe with total number of steps
 
 
 
@@ -25,30 +26,29 @@ rawActivity <- read.csv("activity.csv",
      colClasses = c("integer", "Date", "integer"))
 dim(rawActivity)
 summary(rawActivity)
+library(dplyr)
+byDay <- rawActivity %>% group_by(date) %>%
+     summarize(total = sum(steps, na.rm = TRUE))
+
 ```
 
 
 
 ## What is mean total number of steps taken per day?
-Use ggplot to create histogram of total number of steps taken per day.  
+Create summary data frame by date and create histogram of all "steps per day" values.  
 (Note: filename for plot is *1-hist1* ) 
 
 
 ```{r 1-hist1}
 
 
-library(ggplot2)
-g <- ggplot(rawActivity, aes(x=date, weight = steps))
-g + geom_histogram(bins = 61) + labs(y = "Total Steps per Day")
-library(dplyr)
-summary <- rawActivity  %>% 
-     summarize(mean =  mean(steps, na.rm = TRUE), median = median(steps, na.rm = TRUE))
+hist(byDay$total, xlab = "Steps Per Day", main = "Histogram of Steps per Day")
 
 
 ```
    
 
-Mean steps per day is **`r summary$mean`** and median steps per day is **`r summary$median`**. 
+Mean steps per day is **`r mean(byDay$total)`** and median steps per day is **`r median(byDay$total)`**. 
 
 
 
@@ -58,8 +58,9 @@ Time series plot of the average number of steps taken. Create a new dataframe wi
 (Note: filename for plot is *2-Steps_per_interval* ) 
 
 ```{r 2-Steps_per_interval}
- byInterval <- rawActivity %>% group_by(interval) %>%
+byInterval <- rawActivity %>% group_by(interval) %>%
      summarize(mean = mean(steps, na.rm = TRUE), median = median(steps,na.rm=TRUE) )
+library(ggplot2)
   g <- ggplot(byInterval,  aes(interval,  mean) )
   g + geom_line() + 
        labs(y = "Average # of Steps per Interval" )
@@ -79,7 +80,7 @@ summary(rawActivity)
 ```
 It is notable that there are 8 days for which all data are NA (indicated by NaN for the mean daily number of steps above).  
 To review if there are any additional NA values, All NA data were plotted and the y-axis limits adjusted to see small numbers. In the plots below, one can see that there are exactly 8 days with NA values, so there are no dates where there is a mixture of NA and present data.
-Because of this, one can just set the number of steps to **0** where values are NA. (Or even just remove those rows completely, but that's not what the instructions request.)  
+
 (Note: filename for plot is *3-NA_Review* )
 
 ```{r 3-NA_Review}
@@ -96,22 +97,21 @@ with(subset(rawActivity, is.na(steps)),
 
 ```
 
-Impute the NA values to zero, creating a new dataframe named **activity**, then re-plot the total number of steps per day to compare to the first plot. This does not affect the overall histogram, but will affect any average over all the days, reducing all values proportionally.  
+Because of this, one can just set the number of steps to **0** where values are NA. (Or even just remove those rows completely, but that's not what the instructions request.)  
+Impute the NA values to zero, creating a new dataframe named **activity**, then re-plot the total number of steps per day to compare to the first plot. 
 (Note: filename for plot is *4-hist_after_impute* )
 
 ```{r 4-hist_after_impute}
 activity <- rawActivity
 activity$steps[is.na(activity$steps)] <- 0
 par(  mfrow=c(1,1))
-g <- ggplot(activity, aes(x=date, weight = steps))
-g + geom_histogram(bins = 61) + labs(y = "Total Steps per Day")
-summary2 <- activity  %>% 
-     summarize(mean =  mean(steps, na.rm = TRUE), median = median(steps, na.rm = TRUE))
-
+byDay2 <- activity %>% group_by(date) %>%
+     summarize(total = sum(steps))
+hist(byDay2$total, xlab = "Steps Per Day",  main = "Histogram of Steps per Day")
 ```
 
-After imputation, mean steps per day is **`r summary2$mean`** and median steps per day is **`r summary2$median`**.  
-As a reminder, from the beginning of the document, before imputation, mean steps per day was **`r summary$mean`** and median steps per day was **`r summary$median`**. 
+After imputation, mean steps per day is **`r mean(byDay2$total)`** and median steps per day is **`r median(byDay2$total)`**.  
+As a reminder, from the beginning of the document, before imputation, mean steps per day was **`r mean(byDay$total)`** and median steps per day was **`r median(byDay$total)`**. 
 
 
 
